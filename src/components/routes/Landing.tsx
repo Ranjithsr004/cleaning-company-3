@@ -45,7 +45,7 @@ const BIZ = {
   owner: "Nader Jeek",
   city: "Villingen-Schwenningen",
   region: "Baden-Württemberg",
-  phone: "+49 7721 9999 000",
+  // phone: "+49 7721 9999 000",
   phoneHref: "+497721999900",
   whatsapp: "497721999900",
   email: "Info.hoffmannundjeek@gmail.com",
@@ -516,7 +516,7 @@ function Reviews() {
             <p className="text-sm font-bold text-brand uppercase tracking-wider">Kundenstimmen</p>
             <h2 className="mt-2 text-3xl sm:text-4xl font-black">Geliebt von Unternehmen in {BIZ.region}</h2>
             <div className="mt-4 flex items-center gap-3">
-              <div className="flex">{[0,1,2,3,4].map(i => <Star key={i} className="h-5 w-5 fill-amber-400 text-amber-400" />)}</div>
+              <div className="flex">{[0, 1, 2, 3, 4].map(i => <Star key={i} className="h-5 w-5 fill-amber-400 text-amber-400" />)}</div>
               <span className="font-bold">{BIZ.rating}</span>
               <span className="text-white/60">· {BIZ.reviews} Bewertungen</span>
             </div>
@@ -538,7 +538,7 @@ function Reviews() {
                   <div className="grid h-11 w-11 place-items-center rounded-full bg-[image:var(--gradient-cta)] text-navy font-black text-sm">{r.init}</div>
                   <div>
                     <p className="font-bold">{r.name}</p>
-                    <div className="flex">{[0,1,2,3,4].map(j => <Star key={j} className="h-3.5 w-3.5 fill-amber-400 text-amber-400" />)}</div>
+                    <div className="flex">{[0, 1, 2, 3, 4].map(j => <Star key={j} className="h-3.5 w-3.5 fill-amber-400 text-amber-400" />)}</div>
                   </div>
                 </div>
                 <p className="text-white/80 leading-relaxed text-sm">"${r.quote}"</p>
