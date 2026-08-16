@@ -42,15 +42,17 @@ const BIZ = {
   name: "Hoffmann & Jeek",
   fullName: "Hoffmann & Jeek Gebäudereinigung",
   service: "Gebäudereinigung",
-  city: "Berlin",
-  phone: "+49 30 1234 5678",
-  phoneHref: "+493012345678",
-  whatsapp: "493012345678",
-  email: "info@hoffmann-jeek.de",
-  address: "Friedrichstraße 120, 10117 Berlin",
+  owner: "Nader Jeek",
+  city: "Villingen-Schwenningen",
+  region: "Baden-Württemberg",
+  phone: "+49 7721 9999 000",
+  phoneHref: "+497721999900",
+  whatsapp: "497721999900",
+  email: "Info.hoffmannundjeek@gmail.com",
+  address: "Arndtstr 23, 78054 Villingen-Schwenningen",
   rating: 4.9,
-  reviews: 187,
-  areas: ["Mitte", "Charlottenburg", "Prenzlauer Berg", "Kreuzberg", "Potsdam", "Spandau"],
+  reviews: 143,
+  areas: ["Villingen-Schwenningen", "Stuttgart", "Freiburg im Breisgau", "Karlsruhe", "Mannheim", "Heidelberg", "Ulm", "Konstanz", "Rottweil", "Tuttlingen"],
 };
 
 const NAV = [
@@ -179,13 +181,13 @@ function Hero({ openQuote }: { openQuote: () => void }) {
         <div className="max-w-2xl">
           <div className="inline-flex items-center gap-2 rounded-full bg-white/10 border border-white/20 px-4 py-1.5 text-xs font-bold text-white/90 backdrop-blur mb-6 uppercase tracking-wider">
             <span className="h-2 w-2 rounded-full bg-brand animate-pulse" />
-            Vertrauen seit über 10 Jahren — {BIZ.city}
+            Über 30 Jahre Erfahrung — {BIZ.region}
           </div>
           <h1 className="text-5xl sm:text-6xl lg:text-7xl font-black leading-[1.0] text-white">
             Professionelle<br /><span className="text-brand">Gebäude-</span><br />reinigung
           </h1>
           <p className="mt-6 text-xl text-white/80 leading-relaxed max-w-xl">
-            Hoffmann & Jeek — Ihr zuverlässiger Partner für makellose Sauberkeit in Büros, Schulen, Praxen und Gewerbegebäuden in {BIZ.city} und Umgebung.
+            Hoffmann & Jeek — Ihr zuverlässiger Partner für professionelle Gebäudereinigung in ganz {BIZ.region}. Kostenlose Anfahrt und unverbindliches Angebot inklusive.
           </p>
           <div className="mt-8 flex flex-wrap items-center gap-3">
             {[{ icon: Users, label: "Geschultes Personal" }, { icon: Shield, label: "Voll versichert" }, { icon: Award, label: "5-Sterne bewertet" }].map(b => (
@@ -213,10 +215,10 @@ function Hero({ openQuote }: { openQuote: () => void }) {
 
 function TrustBar() {
   const stats = [
-    { n: "200+", label: "Zufriedene Kunden" },
-    { n: "10+", label: "Jahre Erfahrung" },
-    { n: "4.9★", label: "Google Bewertung" },
-    { n: "100%", label: "Versichert" },
+    { n: "30+", label: "Jahre Erfahrung" },
+    { n: "500+", label: "Zufriedene Kunden" },
+    { n: "Kostenlos", label: "Anfahrt & Angebot" },
+    { n: "100%", label: "Ganz Baden-Württemberg" },
   ];
   return (
     <section className="bg-navy py-10">
@@ -327,14 +329,16 @@ function Gallery() {
 }
 
 const SERVICES = [
-  { icon: Building2, title: "Büroreinigung", desc: "Tägliche oder wöchentliche Reinigung von Arbeitsplätzen, Besprechungsräumen und Gemeinschaftsbereichen.", img: heroImg },
-  { icon: Sparkles, title: "Unterhaltsreinigung", desc: "Gleichmäßige, geplante Pflege, die Ihre Einrichtung Woche für Woche makellos hält.", img: heroImg2 },
-  { icon: Brush, title: "Grundreinigung", desc: "Gründliche Reinigung von oben bis unten für Umzüge, saisonale Resets oder nach Baustellen.", img: gal3 },
-  { icon: Wind, title: "Glasreinigung", desc: "Streifenfreie Innen- und Außenreinigung von Fenstern für Büros und Gewerbegebäude.", img: gal2 },
-  { icon: Layers, title: "Treppenhausreinigung", desc: "Regelmäßige Pflege von Gemeinschaftstreppen, Eingängen und Fluren in Gewerbegebäuden.", img: gal5 },
-  { icon: Stethoscope, title: "Praxisreinigung", desc: "Hygienegeprüfte Reinigung für Arztpraxen, Zahnarztpraxen und medizinische Einrichtungen.", img: heroImg3 },
-  { icon: GraduationCap, title: "Schulreinigung", desc: "Sichere und gründliche Reinigung von Klassenzimmern, Fluren und Gemeinschaftsräumen.", img: work1 },
-  { icon: ClipboardList, title: "Winterdienst", desc: "Schneeräumung, Streuung und ganzjähriger Außenservice für Ihre Immobilie.", img: gal6 },
+  { icon: Wind, title: "Glasreinigung", desc: "Streifenfreie Innen- und Außenreinigung von Fenstern und Glasfassaden — für Büros, Schaufenster und Gewerbegebäude.", img: gal2 },
+  { icon: Brush, title: "Grundreinigung", desc: "Intensive Tiefenreinigung von Böden, Wänden und Oberflächen — ideal nach Baustellen, Renovierungen oder zum saisonalen Reset.", img: gal3 },
+  { icon: Building2, title: "Bauendreinigung", desc: "Professionelle Endreinigung nach Bau- und Renovierungsarbeiten — damit Ihr Objekt bezugsfertig und makellos übergeben werden kann.", img: heroImg },
+  { icon: Sparkles, title: "Unterhaltsreinigung", desc: "Regelmäßige, vertraglich abgesicherte Reinigung Ihrer Büros, Praxen und Gewerberäume nach Plan.", img: heroImg2 },
+  { icon: Layers, title: "Baureinigung", desc: "Baubegleitende Reinigung während laufender Bauprojekte — zuverlässig und auf Ihre Zeitpläne abgestimmt.", img: gal5 },
+  { icon: Share2, title: "Fassadenreinigung", desc: "Fachgerechte Reinigung von Außenfassaden inklusive Graffitientfernung, Algensanierung und Hochdruckbehandlung.", img: building1 },
+  { icon: Camera, title: "Fenster- & Jalousienenreinigung", desc: "Gründliche Reinigung von Fenstern, Jalousien, Rollos und Sonnenschutzsystemen — innen wie außen.", img: gal6 },
+  { icon: ClipboardList, title: "Winterdienst", desc: "Schneeräumung, Streuung und Glättebekämpfung für Gehwege, Parkplätze und Außenanlagen Ihrer Immobilie.", img: work4 },
+  { icon: HeadphonesIcon, title: "Hausmeisterdienst", desc: "Umfassende Hausmeisterleistungen: Instandhaltung, Kleinreparaturen, Grünanlagenpflege und Verkehrssicherungspflicht.", img: work2 },
+  { icon: GraduationCap, title: "Weitere Reinigungsarbeiten", desc: "Individuelle Sonderreinigungen, Treppenhaus-, Tiefgaragen- und Veranstaltungsreinigungen nach Bedarf.", img: work1 },
 ];
 
 function Services() {
@@ -407,10 +411,10 @@ function WorkPortfolio() {
 
 function WhyUs() {
   const points = [
-    { icon: Shield, title: "Voll versichert", desc: "Jeder Auftrag ist durch eine umfassende Haftpflichtversicherung abgesichert." },
-    { icon: Users, title: "Geschultes Team", desc: "Unsere Reinigungskräfte sind geprüft, geschult und professionell ausgerüstet." },
-    { icon: Clock, title: "Flexible Zeiten", desc: "Wir arbeiten rund um Ihre Geschäftszeiten — abends, am Wochenende oder früh morgens." },
-    { icon: HeadphonesIcon, title: "Fester Ansprechpartner", desc: "Kein Callcenter. Ein persönlicher Ansprechpartner direkt in Berlin." },
+    { icon: Award, title: "30+ Jahre Erfahrung", desc: "Seit über drei Jahrzehnten vertrauen Unternehmen in Baden-Württemberg auf unsere Expertise und Zuverlässigkeit." },
+    { icon: MapPin, title: "Kostenlose Anfahrt", desc: "Wir kommen zu Ihnen — ohne Anfahrtskosten. Aufträge in ganz Baden-Württemberg." },
+    { icon: CheckCircle2, title: "Unverbindliches Angebot", desc: "Wir erstellen Ihnen ein kostenloses, transparentes Angebot — ohne versteckte Kosten oder Verpflichtungen." },
+    { icon: Shield, title: "Voll versichert", desc: "Jeder Auftrag ist durch eine umfassende Haftpflichtversicherung abgesichert — Ihr Eigentum ist stets geschützt." },
   ];
   return (
     <section id="about" className="py-20 lg:py-28 relative overflow-hidden">
@@ -424,11 +428,12 @@ function WhyUs() {
             <p className="text-sm font-bold text-brand uppercase tracking-wider">Warum Hoffmann & Jeek</p>
             <h2 className="mt-2 text-3xl sm:text-4xl font-black">Zuverlässigkeit, auf die Sie bauen können</h2>
             <div className="mt-6 space-y-4 text-white/80 leading-relaxed">
-              <p>Wir wissen, dass saubere Gebäude kein Luxus sind — sie spiegeln Ihre Marke wider. Deshalb kommt jeder Vertrag mit einem festen Ansprechpartner, transparenten Qualitätskontrollen und einem Team, das Sie jede Woche wiedererkennen werden.</p>
-              <p>Mit über 10 Jahren Erfahrung im Berliner Raum haben wir unsere Reputation auf Pünktlichkeit, Qualität und ehrliche Kommunikation aufgebaut.</p>
+              <p>Mit über 30 Jahren Erfahrung in der Gebäudereinigung sind wir Ihr verlässlicher Partner für saubere, gepflegte Gebäude in ganz Baden-Württemberg. Jeder Auftrag wird mit höchster Sorgfalt und professionellem Equipment durchgeführt.</p>
+              <p>Inhaber Nader Jeek steht persönlich für Qualität und Kundenzufriedenheit — mit einem Team, das Ihre Anforderungen kennt und übertrifft. Kostenlose Anfahrt und unverbindliches Angebot sind für uns selbstverständlich.</p>
             </div>
             <div className="mt-8">
               <img src={logo} alt="Hoffmann & Jeek" className="h-20 w-20 rounded-2xl object-cover border-2 border-brand/50" />
+              <p className="mt-3 text-sm text-white/60">Inhaber: Nader Jeek</p>
             </div>
           </div>
           <div className="grid grid-cols-2 gap-4">
@@ -509,7 +514,7 @@ function Reviews() {
         <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-6 mb-10">
           <div>
             <p className="text-sm font-bold text-brand uppercase tracking-wider">Kundenstimmen</p>
-            <h2 className="mt-2 text-3xl sm:text-4xl font-black">Geliebt von Unternehmen in {BIZ.city}</h2>
+            <h2 className="mt-2 text-3xl sm:text-4xl font-black">Geliebt von Unternehmen in {BIZ.region}</h2>
             <div className="mt-4 flex items-center gap-3">
               <div className="flex">{[0,1,2,3,4].map(i => <Star key={i} className="h-5 w-5 fill-amber-400 text-amber-400" />)}</div>
               <span className="font-bold">{BIZ.rating}</span>
@@ -547,15 +552,15 @@ function Reviews() {
 }
 
 function ServiceArea() {
-  const areas = [...BIZ.areas, "Wilmersdorf", "Neukölln", "Tempelhof", "Steglitz", "Friedrichshain", "Moabit"];
+  const areas = BIZ.areas;
   return (
     <section className="py-20 lg:py-24">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           <div>
             <p className="text-sm font-bold text-brand uppercase tracking-wider">Einsatzgebiet</p>
-            <h2 className="mt-2 text-3xl sm:text-4xl font-black text-navy">{BIZ.city} & Umgebung</h2>
-            <p className="mt-4 text-lg text-muted-foreground">Mit Sitz in Berlin betreuen wir Unternehmen in folgenden Bezirken und Umlandgemeinden:</p>
+            <h2 className="mt-2 text-3xl sm:text-4xl font-black text-navy">Ganz {BIZ.region}</h2>
+            <p className="mt-4 text-lg text-muted-foreground">Mit Sitz in Villingen-Schwenningen übernehmen wir Aufträge in ganz Baden-Württemberg — mit kostenloser Anfahrt.</p>
             <div className="mt-6 flex flex-wrap gap-2">
               {areas.map(a => (
                 <span key={a} className="inline-flex items-center gap-1.5 rounded-full bg-secondary px-4 py-2 text-sm font-semibold text-navy border hover:bg-[image:var(--gradient-cta)] hover:border-brand transition-colors cursor-default">
@@ -563,16 +568,17 @@ function ServiceArea() {
                 </span>
               ))}
             </div>
+            <p className="mt-4 text-sm text-muted-foreground">Und alle weiteren Städte und Gemeinden in Baden-Württemberg — fragen Sie uns gerne an!</p>
           </div>
           <div className="relative rounded-3xl overflow-hidden shadow-elegant">
-            <img src={building1} alt="Berlin Skyline — Einsatzgebiet Hoffmann & Jeek" className="w-full h-80 object-cover" />
+            <img src={building1} alt="Baden-Württemberg — Einsatzgebiet Hoffmann & Jeek" className="w-full h-80 object-cover" />
             <div className="absolute inset-0 bg-gradient-to-t from-navy/70 via-transparent to-transparent" />
             <div className="absolute bottom-6 left-6">
               <div className="bg-card/90 backdrop-blur rounded-2xl px-5 py-3 shadow-card border">
                 <p className="text-sm font-bold text-navy flex items-center gap-2">
-                  <MapPin className="h-4 w-4 text-brand" /> Berlin & Brandenburg
+                  <MapPin className="h-4 w-4 text-brand" /> Baden-Württemberg
                 </p>
-                <p className="text-xs text-muted-foreground mt-0.5">{areas.length}+ Bezirke abgedeckt</p>
+                <p className="text-xs text-muted-foreground mt-0.5">Kostenlose Anfahrt im gesamten Bundesland</p>
               </div>
             </div>
           </div>
@@ -601,12 +607,13 @@ function Pricing({ openQuote }: { openQuote: () => void }) {
 }
 
 const FAQS = [
-  { q: "Wie oft sollte unser Büro gereinigt werden?", a: "Das hängt von der Nutzungsfrequenz und Branche ab. Die meisten Büros kommen mit 2–5 Reinigungen pro Woche aus; medizinische Praxen benötigen oft tägliche Reinigung. Wir beraten Sie gerne bei der kostenlosen Erstberatung." },
-  { q: "Sind Ihre Reinigungskräfte versichert?", a: "Ja. Jede Reinigungskraft ist durch unsere umfassende Haftpflichtversicherung abgesichert. Alle Mitarbeiter sind überprüft und geschult, bevor sie auf Ihrem Gelände eingesetzt werden." },
-  { q: "Bieten Sie auch Einzelreinigungen an?", a: "Absolut. Wir übernehmen Ein- und Auszugsreinigungen, Baureinigungen und einmalige Grundreinigungen zusätzlich zu laufenden Verträgen." },
-  { q: "Können Sie außerhalb der Geschäftszeiten reinigen?", a: "Ja — Abende, frühe Morgenstunden und Wochenenden sind für uns Standard. Wir richten uns nach Ihrem Betrieb, nicht umgekehrt." },
-  { q: "Wie schnell erhalten wir ein Angebot?", a: "In der Regel liefern wir ein Angebot innerhalb von 24 Stunden und können nach Vertragsabschluss innerhalb einer Woche beginnen." },
-  { q: "Welche Reinigungsmittel verwenden Sie?", a: "Wir setzen zertifizierte, umweltschonende Profiprodukte ein. Für medizinische Einrichtungen oder allergiegefährdete Personen passen wir unser Sortiment entsprechend an." },
+  { q: "Ist die Anfahrt wirklich kostenlos?", a: "Ja, absolut. Wir übernehmen Aufträge in ganz Baden-Württemberg — die Anfahrt ist für Sie grundsätzlich kostenlos. Kein versteckter Aufschlag, egal wo in BW Sie sich befinden." },
+  { q: "Ist das Angebot wirklich unverbindlich?", a: "Ja. Unser Angebot ist kostenlos und vollkommen unverbindlich. Wir besichtigen Ihr Objekt, erstellen ein transparentes Angebot und Sie entscheiden ohne Druck, ob wir zusammenarbeiten." },
+  { q: "Wie viel Erfahrung hat Hoffmann & Jeek?", a: "Wir sind seit über 30 Jahren in der Gebäudereinigung tätig. In dieser Zeit haben wir Hunderte von Kunden in ganz Baden-Württemberg betreut — von kleinen Büros bis hin zu großen Gewerbeimmobilien." },
+  { q: "Welche Leistungen bieten Sie an?", a: "Wir bieten Glasreinigung, Grundreinigung, Bauendreinigung, Unterhaltsreinigung, Baureinigung, Fassadenreinigung, Fenster- und Jalousienenreinigung, Winterdienst, Hausmeisterdienst und weitere Sonderreinigungen an." },
+  { q: "Können Sie außerhalb der Geschäftszeiten reinigen?", a: "Ja — Abende, frühe Morgenstunden und Wochenenden sind für uns kein Problem. Wir richten uns vollständig nach Ihren Betriebszeiten und Anforderungen." },
+  { q: "Wie schnell erhalten wir ein Angebot?", a: "In der Regel erstellen wir Ihr Angebot innerhalb von 24 Stunden nach der Besichtigung. Nach Auftragserteilung können wir meist innerhalb weniger Tage starten." },
+  { q: "Sind Ihre Reinigungskräfte versichert?", a: "Ja. Alle unsere Mitarbeiter sind vollständig versichert und geschult. Jeder Auftrag ist durch unsere Haftpflichtversicherung abgesichert — Ihr Eigentum ist bei uns sicher." },
 ];
 
 function FAQ() {
@@ -693,8 +700,8 @@ function Contact() {
               <img src={logo} alt="Hoffmann & Jeek" className="h-14 w-14 rounded-xl object-cover" />
               <div>
                 <p className="text-xs uppercase tracking-wider text-muted-foreground font-bold">Ihr Ansprechpartner</p>
-                <p className="text-navy font-black">{BIZ.fullName}</p>
-                <p className="text-sm text-muted-foreground">Gebäudereinigung Berlin</p>
+                <p className="text-navy font-black">{BIZ.owner}</p>
+                <p className="text-sm text-muted-foreground">Inhaber, {BIZ.fullName}</p>
               </div>
             </div>
           </div>
@@ -724,7 +731,7 @@ function Footer() {
                 <p className="text-xs text-white/50 uppercase tracking-wider">Gebäudereinigung</p>
               </div>
             </div>
-            <p className="text-sm leading-relaxed">Professionelle Gebäudereinigung für Unternehmen in {BIZ.city} und Umgebung.</p>
+            <p className="text-sm leading-relaxed">Professionelle Gebäudereinigung für Unternehmen in ganz {BIZ.region}. Kostenlose Anfahrt. Unverbindliches Angebot. Über 30 Jahre Erfahrung.</p>
             <div className="mt-6 flex gap-3">
               {[Share2, Camera, Play].map((Icon, i) => (
                 <a key={i} href="#" className="grid h-9 w-9 place-items-center rounded-full bg-white/5 hover:bg-brand hover:text-navy transition">
@@ -749,6 +756,7 @@ function Footer() {
             <p className="font-black text-white mb-4">Kontakt</p>
             <address className="not-italic text-sm space-y-2">
               <p>{BIZ.fullName}</p>
+              <p>Inhaber: {BIZ.owner}</p>
               <p>{BIZ.address}</p>
               <p><a href={`tel:${BIZ.phoneHref}`} className="hover:text-brand">{BIZ.phone}</a></p>
               <p><a href={`mailto:${BIZ.email}`} className="hover:text-brand">{BIZ.email}</a></p>
