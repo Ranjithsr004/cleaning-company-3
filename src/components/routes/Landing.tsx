@@ -28,15 +28,13 @@ import gal2 from "@/src/assets/photo_7.jpg";
 import gal3 from "@/src/assets/photo_3.jpg";
 import gal5 from "@/src/assets/photo_9.jpg";
 import gal6 from "@/src/assets/photo_8.jpg";
+import gal7 from "@/src/assets/photo_5_2026-08-15_19-51-56.jpg";
 import work1 from "@/src/assets/photo_43.jpg";
 import work2 from "@/src/assets/photo_12_2026-08-15_19-51-56.jpg";
 import work3 from "@/src/assets/photo_42.jpg";
 import work4 from "@/src/assets/photo_16.jpg";
 import building1 from "@/src/assets/photo_13_2026-08-15_19-51-56.jpg";
 import building2 from "@/src/assets/photo_14_2026-08-15_19-51-56.jpg";
-import video1 from "@/src/assets/video_2026-08-15_19-51-56.mp4";
-import video2 from "@/src/assets/video_2026-08-15_19-51-56 (2).mp4";
-import video3 from "@/src/assets/video_2026-08-15_19-51-56 (3).mp4";
 
 const BIZ = {
   name: "Hoffmann & Jeek",
@@ -45,14 +43,14 @@ const BIZ = {
   owner: "Nader Jeek",
   city: "Villingen-Schwenningen",
   region: "Baden-Württemberg",
-  // phone: "+49 7721 9999 000",
-  phoneHref: "+497721999900",
-  whatsapp: "497721999900",
+  phone: "+4917641609894",
+  phoneHref: "+4917641609894",
+  whatsapp: "4917641609894",
   email: "Info.hoffmannundjeek@gmail.com",
   address: "Arndtstr 23, 78054 Villingen-Schwenningen",
   rating: 4.9,
   reviews: 143,
-  areas: ["Villingen-Schwenningen", "Stuttgart", "Freiburg im Breisgau", "Karlsruhe", "Mannheim", "Heidelberg", "Ulm", "Konstanz", "Rottweil", "Tuttlingen"],
+  areas: ["Schwarwald-Baar-Kreis", "Breisgau Hochschwarzwald", "Waldshut", "Konstanz", "Tuttlingen", "Freiburg", "Donaueschingen"],
 };
 
 const NAV = [
@@ -69,6 +67,7 @@ export default function Landing() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [cookieOpen, setCookieOpen] = useState(false);
+  const [legalOpen, setLegalOpen] = useState<"datenschutz" | "impressum" | "agb" | null>(null);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20);
@@ -89,10 +88,7 @@ export default function Landing() {
       <main>
         <Hero openQuote={openQuote} />
         <TrustBar />
-        <VideoShowcase />
-        <Gallery />
         <Services />
-        <WorkPortfolio />
         <WhyUs />
         <HowItWorks openQuote={openQuote} />
         <Reviews />
@@ -100,12 +96,22 @@ export default function Landing() {
         <Pricing openQuote={openQuote} />
         <FAQ />
         <FinalCTA />
-        <Contact />
+        <Contact onDatenschutz={() => setLegalOpen("datenschutz")} />
       </main>
-      <Footer />
-      <QuoteModal open={quoteOpen} onOpenChange={setQuoteOpen} />
+      <Footer
+        onDatenschutz={() => setLegalOpen("datenschutz")}
+        onImpressum={() => setLegalOpen("impressum")}
+        onAgb={() => setLegalOpen("agb")}
+      />
+      <QuoteModal open={quoteOpen} onOpenChange={setQuoteOpen} onDatenschutz={() => setLegalOpen("datenschutz")} />
+      <LegalModals open={legalOpen} onClose={() => setLegalOpen(null)} />
       <FloatingActions />
-      {cookieOpen && <CookieBanner onClose={() => { localStorage.setItem("cookie-consent", "1"); setCookieOpen(false); }} />}
+      {cookieOpen && (
+        <CookieBanner
+          onClose={() => { localStorage.setItem("cookie-consent", "1"); setCookieOpen(false); }}
+          onDatenschutz={() => setLegalOpen("datenschutz")}
+        />
+      )}
       <Toaster />
     </div>
   );
@@ -157,7 +163,7 @@ function Header({ scrolled, menuOpen, setMenuOpen, openQuote }: {
 }
 
 function Hero({ openQuote }: { openQuote: () => void }) {
-  const slides = [heroImg, heroImg2, heroImg3];
+  const slides = [building1, building2];
   const [current, setCurrent] = useState(0);
   useEffect(() => {
     const t = setInterval(() => setCurrent(c => (c + 1) % slides.length), 5000);
@@ -187,7 +193,7 @@ function Hero({ openQuote }: { openQuote: () => void }) {
             Professionelle<br /><span className="text-brand">Gebäude-</span><br />reinigung
           </h1>
           <p className="mt-6 text-xl text-white/80 leading-relaxed max-w-xl">
-            Hoffmann & Jeek — Ihr zuverlässiger Partner für professionelle Gebäudereinigung in ganz {BIZ.region}. Kostenlose Anfahrt und unverbindliches Angebot inklusive.
+            Sauberkeit, Zuverlässigkeit und persönliche Betreuung — seit über 30 Jahren Ihr professioneller Partner für Gebäude, Büros, Praxen und gewerbliche Objekte in ganz {BIZ.region}. Kostenlose Anfahrt und unverbindliches Angebot inklusive.
           </p>
           <div className="mt-8 flex flex-wrap items-center gap-3">
             {[{ icon: Users, label: "Geschultes Personal" }, { icon: Shield, label: "Voll versichert" }, { icon: Award, label: "5-Sterne bewertet" }].map(b => (
@@ -236,108 +242,16 @@ function TrustBar() {
   );
 }
 
-function VideoShowcase() {
-  const videos = [
-    { src: video1, label: "Professionelle Reinigung" },
-    { src: video2, label: "Bodenaufbereitung" },
-    { src: video3, label: "Gebäudeservice" },
-  ];
-  const [active, setActive] = useState(0);
-  const [muted, setMuted] = useState(true);
-  const videoRef = useRef<HTMLVideoElement>(null);
-  return (
-    <section className="py-20 lg:py-28 bg-surface">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-12">
-          <p className="text-sm font-bold text-brand uppercase tracking-wider">Live-Einblick</p>
-          <h2 className="mt-2 text-3xl sm:text-4xl font-black text-navy">Unsere Arbeit in Aktion</h2>
-          <p className="mt-3 text-lg text-muted-foreground">Echte Aufnahmen aus unseren Projekten — keine Stock-Fotos.</p>
-        </div>
-        <div className="grid lg:grid-cols-[2fr_1fr] gap-6 items-start">
-          <div className="relative rounded-3xl overflow-hidden shadow-elegant bg-navy aspect-video group">
-            <video key={active} ref={videoRef} src={videos[active].src} autoPlay loop muted={muted} playsInline className="w-full h-full object-cover" />
-            <div className="absolute inset-0 flex items-end p-6 bg-gradient-to-t from-navy/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity">
-              <div className="flex items-center justify-between w-full">
-                <span className="text-white font-bold text-lg">{videos[active].label}</span>
-                <button onClick={() => setMuted(m => !m)} className="grid h-11 w-11 place-items-center rounded-full bg-white/20 backdrop-blur text-white hover:bg-white/30 transition">
-                  {muted ? <VolumeX className="h-5 w-5" /> : <Volume2 className="h-5 w-5" />}
-                </button>
-              </div>
-            </div>
-            <div className="absolute top-4 left-4 flex items-center gap-2 bg-red-500 text-white text-xs font-bold px-3 py-1.5 rounded-full">
-              <span className="h-2 w-2 rounded-full bg-white animate-pulse" />Video
-            </div>
-          </div>
-          <div className="flex flex-row lg:flex-col gap-4">
-            {videos.map((v, i) => (
-              <button key={i} onClick={() => { setActive(i); setMuted(true); }}
-                className={`relative rounded-2xl overflow-hidden flex-1 lg:flex-none aspect-video border-2 transition-all ${i === active ? "border-brand shadow-glow scale-[1.02]" : "border-transparent opacity-70 hover:opacity-100"}`}>
-                <video src={v.src} muted playsInline className="w-full h-full object-cover" />
-                <div className="absolute inset-0 bg-navy/40 flex items-center justify-center">
-                  <div className={`grid h-10 w-10 place-items-center rounded-full ${i === active ? "bg-brand" : "bg-white/20"}`}>
-                    <Play className={`h-4 w-4 fill-current ${i === active ? "text-navy" : "text-white"}`} />
-                  </div>
-                </div>
-                <div className="absolute bottom-2 left-2 right-2">
-                  <p className="text-white text-xs font-semibold bg-navy/60 rounded px-2 py-0.5 backdrop-blur truncate">{v.label}</p>
-                </div>
-              </button>
-            ))}
-          </div>
-        </div>
-      </div>
-    </section>
-  );
-}
-
-function Gallery() {
-  const imgs = [
-    { src: gal1, alt: "Fassadenreinigung mit Hochdruckreiniger", tall: true },
-    { src: gal2, alt: "Professionelle Fensterreinigung", tall: false },
-    { src: gal3, alt: "Baureinigung nach Baustelle", tall: false },
-    { src: heroImg3, alt: "Maschinengestützte Bodenreinigung", tall: false },
-    { src: gal5, alt: "Hausmeisterservice & Außenpflege", tall: true },
-    { src: gal6, alt: "Winterdienst & Schneeräumung", tall: false },
-  ];
-  return (
-    <section id="gallery" className="py-20 lg:py-28">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-6 mb-12">
-          <div>
-            <p className="text-sm font-bold text-brand uppercase tracking-wider">Unsere Arbeit</p>
-            <h2 className="mt-2 text-3xl sm:text-4xl font-black text-navy">Ergebnisse, die für sich sprechen</h2>
-          </div>
-          <Button asChild variant="outline" className="border-navy text-navy hover:bg-navy hover:text-white font-semibold self-start sm:self-auto">
-            <a href="#contact">Alle Referenzen <ArrowRight className="ml-2 h-4 w-4" /></a>
-          </Button>
-        </div>
-        <div className="grid grid-cols-2 lg:grid-cols-3 gap-4" style={{ gridAutoRows: "200px" }}>
-          {imgs.map((img, i) => (
-            <div key={i} style={{ gridRow: img.tall ? "span 2" : "span 1" }}
-              className="group relative rounded-2xl overflow-hidden shadow-card hover:shadow-elegant transition-all duration-500 cursor-pointer">
-              <img src={img.src} alt={img.alt} loading="lazy" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
-              <div className="absolute inset-0 bg-gradient-to-t from-navy/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-              <div className="absolute bottom-0 left-0 right-0 p-4 translate-y-full group-hover:translate-y-0 transition-transform duration-300">
-                <p className="text-white text-sm font-semibold">{img.alt}</p>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-}
-
 const SERVICES = [
-  { icon: Wind, title: "Glasreinigung", desc: "Streifenfreie Innen- und Außenreinigung von Fenstern und Glasfassaden — für Büros, Schaufenster und Gewerbegebäude.", img: gal2 },
-  { icon: Brush, title: "Grundreinigung", desc: "Intensive Tiefenreinigung von Böden, Wänden und Oberflächen — ideal nach Baustellen, Renovierungen oder zum saisonalen Reset.", img: gal3 },
-  { icon: Building2, title: "Bauendreinigung", desc: "Professionelle Endreinigung nach Bau- und Renovierungsarbeiten — damit Ihr Objekt bezugsfertig und makellos übergeben werden kann.", img: heroImg },
-  { icon: Sparkles, title: "Unterhaltsreinigung", desc: "Regelmäßige, vertraglich abgesicherte Reinigung Ihrer Büros, Praxen und Gewerberäume nach Plan.", img: heroImg2 },
-  { icon: Layers, title: "Baureinigung", desc: "Baubegleitende Reinigung während laufender Bauprojekte — zuverlässig und auf Ihre Zeitpläne abgestimmt.", img: gal5 },
-  { icon: Share2, title: "Fassadenreinigung", desc: "Fachgerechte Reinigung von Außenfassaden inklusive Graffitientfernung, Algensanierung und Hochdruckbehandlung.", img: building1 },
-  { icon: Camera, title: "Fenster- & Jalousienenreinigung", desc: "Gründliche Reinigung von Fenstern, Jalousien, Rollos und Sonnenschutzsystemen — innen wie außen.", img: gal6 },
-  { icon: ClipboardList, title: "Winterdienst", desc: "Schneeräumung, Streuung und Glättebekämpfung für Gehwege, Parkplätze und Außenanlagen Ihrer Immobilie.", img: work4 },
-  { icon: HeadphonesIcon, title: "Hausmeisterdienst", desc: "Umfassende Hausmeisterleistungen: Instandhaltung, Kleinreparaturen, Grünanlagenpflege und Verkehrssicherungspflicht.", img: work2 },
+  { icon: Wind, title: "Glasreinigung", desc: "Streifenfreie Innen- und Außenreinigung von Fenstern und Glasfassaden — für Büros, Schaufenster und Gewerbegebäude.", img: heroImg2 },
+  { icon: Brush, title: "Grundreinigung", desc: "Intensive Tiefenreinigung von Böden, Wänden und Oberflächen — ideal nach Baustellen, Renovierungen oder zum saisonalen Reset.", img: heroImg3 },
+  { icon: Building2, title: "Bauendreinigung", desc: "Professionelle Endreinigung nach Bau- und Renovierungsarbeiten — damit Ihr Objekt bezugsfertig und makellos übergeben werden kann.", img: gal3 },
+  { icon: Sparkles, title: "Unterhaltsreinigung", desc: "Regelmäßige, vertraglich abgesicherte Reinigung Ihrer Büros, Praxen und Gewerberäume nach Plan.", img: heroImg },
+  { icon: Layers, title: "Baureinigung", desc: "Baubegleitende Reinigung während laufender Bauprojekte — zuverlässig und auf Ihre Zeitpläne abgestimmt.", img: gal7 },
+  { icon: Share2, title: "Fassadenreinigung", desc: "Fachgerechte Reinigung von Außenfassaden inklusive Graffitientfernung, Algensanierung und Hochdruckbehandlung.", img: gal1 },
+  { icon: Camera, title: "Fenster- & Jalousienenreinigung", desc: "Gründliche Reinigung von Fenstern, Jalousien, Rollos und Sonnenschutzsystemen — innen wie außen.", img: gal2 },
+  { icon: ClipboardList, title: "Winterdienst", desc: "Schneeräumung, Streuung und Glättebekämpfung für Gehwege, Parkplätze und Außenanlagen Ihrer Immobilie.", img: gal6 },
+  { icon: HeadphonesIcon, title: "Hausmeisterdienst", desc: "Umfassende Hausmeisterleistungen: Instandhaltung, Kleinreparaturen, Grünanlagenpflege und Verkehrssicherungspflicht.", img: gal5 },
   { icon: GraduationCap, title: "Weitere Reinigungsarbeiten", desc: "Individuelle Sonderreinigungen, Treppenhaus-, Tiefgaragen- und Veranstaltungsreinigungen nach Bedarf.", img: work1 },
 ];
 
@@ -371,43 +285,43 @@ function Services() {
   );
 }
 
-function WorkPortfolio() {
-  const works = [
-    { img: work1, title: "Schulreinigung", sub: "Bodenpflege Klassenzimmer", tag: "Bildungseinrichtung" },
-    { img: work2, title: "Korridorreinigung", sub: "Hallenboden aufbereitet & versiegelt", tag: "Gewerbegebäude" },
-    { img: work3, title: "Grundreinigung", sub: "Polieren & Grundierung Schulboden", tag: "Schule" },
-    { img: work4, title: "Unterhaltsreinigung", sub: "Regelmäßige Hallenpflege", tag: "Gewerbe" },
-    { img: building1, title: "Glasreinigung", sub: "Hochhausfassaden in Berlin", tag: "Großprojekt" },
-    { img: building2, title: "Firmengebäude", sub: "Außenanlage & Eingangsbereich", tag: "Dauerauftrag" },
-  ];
-  return (
-    <section className="py-20 lg:py-28">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="max-w-2xl mb-14">
-          <p className="text-sm font-bold text-brand uppercase tracking-wider">Referenzprojekte</p>
-          <h2 className="mt-2 text-3xl sm:text-4xl font-black text-navy">Echte Projekte. Echte Ergebnisse.</h2>
-          <p className="mt-4 text-lg text-muted-foreground">Ein Blick in unsere abgeschlossenen Aufträge — von Schulen über Praxen bis hin zu Gewerbeimmobilien.</p>
-        </div>
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {works.map((w, i) => (
-            <div key={i} className="group relative rounded-2xl overflow-hidden shadow-card hover:shadow-elegant transition-all duration-300 bg-card border">
-              <div className="relative h-52 overflow-hidden">
-                <img src={w.img} alt={w.title} loading="lazy" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
-                <div className="absolute top-3 left-3">
-                  <span className="bg-brand text-navy text-xs font-bold px-3 py-1 rounded-full">{w.tag}</span>
-                </div>
-              </div>
-              <div className="p-5">
-                <h3 className="font-bold text-navy text-lg">{w.title}</h3>
-                <p className="text-sm text-muted-foreground mt-1">{w.sub}</p>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-}
+// function WorkPortfolio() {
+//   const works = [
+//     { img: work1, title: "Schulreinigung", sub: "Bodenpflege Klassenzimmer", tag: "Bildungseinrichtung" },
+//     { img: work2, title: "Korridorreinigung", sub: "Hallenboden aufbereitet & versiegelt", tag: "Gewerbegebäude" },
+//     { img: work3, title: "Grundreinigung", sub: "Polieren & Grundierung Schulboden", tag: "Schule" },
+//     { img: work4, title: "Unterhaltsreinigung", sub: "Regelmäßige Hallenpflege", tag: "Gewerbe" },
+//     { img: building1, title: "Glasreinigung", sub: "Hochhausfassaden", tag: "Großprojekt" },
+//     { img: building2, title: "Firmengebäude", sub: "Außenanlage & Eingangsbereich", tag: "Dauerauftrag" },
+//   ];
+//   return (
+//     <section className="py-20 lg:py-28">
+//       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+//         <div className="max-w-2xl mb-14">
+//           <p className="text-sm font-bold text-brand uppercase tracking-wider">Referenzprojekte</p>
+//           <h2 className="mt-2 text-3xl sm:text-4xl font-black text-navy">Echte Projekte. Echte Ergebnisse.</h2>
+//           <p className="mt-4 text-lg text-muted-foreground">Ein Blick in unsere abgeschlossenen Aufträge — von Schulen über Praxen bis hin zu Gewerbeimmobilien.</p>
+//         </div>
+//         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+//           {works.map((w, i) => (
+//             <div key={i} className="group relative rounded-2xl overflow-hidden shadow-card hover:shadow-elegant transition-all duration-300 bg-card border">
+//               <div className="relative h-52 overflow-hidden">
+//                 <img src={w.img} alt={w.title} loading="lazy" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+//                 <div className="absolute top-3 left-3">
+//                   <span className="bg-brand text-navy text-xs font-bold px-3 py-1 rounded-full">{w.tag}</span>
+//                 </div>
+//               </div>
+//               <div className="p-5">
+//                 <h3 className="font-bold text-navy text-lg">{w.title}</h3>
+//                 <p className="text-sm text-muted-foreground mt-1">{w.sub}</p>
+//               </div>
+//             </div>
+//           ))}
+//         </div>
+//       </div>
+//     </section>
+//   );
+// }
 
 function WhyUs() {
   const points = [
@@ -428,8 +342,10 @@ function WhyUs() {
             <p className="text-sm font-bold text-brand uppercase tracking-wider">Warum Hoffmann & Jeek</p>
             <h2 className="mt-2 text-3xl sm:text-4xl font-black">Zuverlässigkeit, auf die Sie bauen können</h2>
             <div className="mt-6 space-y-4 text-white/80 leading-relaxed">
-              <p>Mit über 30 Jahren Erfahrung in der Gebäudereinigung sind wir Ihr verlässlicher Partner für saubere, gepflegte Gebäude in ganz Baden-Württemberg. Jeder Auftrag wird mit höchster Sorgfalt und professionellem Equipment durchgeführt.</p>
-              <p>Inhaber Nader Jeek steht persönlich für Qualität und Kundenzufriedenheit — mit einem Team, das Ihre Anforderungen kennt und übertrifft. Kostenlose Anfahrt und unverbindliches Angebot sind für uns selbstverständlich.</p>
+              <p>Bei Hoffmann &amp; Jeek Gebäudereinigung stehen Sauberkeit, Zuverlässigkeit und persönliche Betreuung an erster Stelle. Mit über 30 Jahren Erfahrung kümmern wir uns professionell um die Reinigung und Pflege von Gebäuden, Wohnungen, Büros, Praxen und gewerblichen Objekten.</p>
+              <p>Von der regelmäßigen Unterhaltsreinigung über Grund-, Glas- und Fensterreinigung bis hin zu Bauendreinigung, Fassadenreinigung, Hausmeisterservice und Winterdienst – wir bieten Ihnen zuverlässige Lösungen aus einer Hand.</p>
+              <p>Ob Privathaushalt, Unternehmen, Praxis, Büro oder öffentliche Einrichtung: Wir stimmen unsere Leistungen individuell auf Ihre Wünsche und Ihr Objekt ab. Dabei legen wir großen Wert auf gründliche Arbeit, flexible Einsatzzeiten und einen persönlichen Ansprechpartner.</p>
+              <p>Gerne besichtigen wir Ihr Objekt kostenlos und unverbindlich und erstellen Ihnen anschließend ein passendes Angebot. <strong className="text-brand">Anfahrtskosten fallen nicht an.</strong></p>
             </div>
             <div className="mt-8">
               <img src={logo} alt="Hoffmann & Jeek" className="h-20 w-20 rounded-2xl object-cover border-2 border-brand/50" />
@@ -665,16 +581,50 @@ function FinalCTA() {
   );
 }
 
-function Contact() {
+function Contact({ onDatenschutz }: { onDatenschutz?: () => void }) {
+  const [form, setForm] = useState({ name: "", email: "", phone: "", service: "", message: "", privacy: false });
+  const [sending, setSending] = useState(false);
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setSending(true);
+    const subject = encodeURIComponent(`Kontaktanfrage von ${form.name} – ${BIZ.fullName}`);
+    const body = encodeURIComponent(
+      `Sehr geehrte Damen und Herren,
+
+hiermit möchte ich Kontakt aufnehmen.
+
+Name: ${form.name}
+E-Mail: ${form.email}
+Telefon: ${form.phone}
+Gewünschte Leistung: ${form.service || "Keine Angabe"}
+
+Nachricht:
+${form.message}
+
+---
+Diese Anfrage wurde über das Kontaktformular auf der Website von ${BIZ.fullName} gesendet.`
+    );
+    window.location.href = `mailto:${BIZ.email}?subject=${subject}&body=${body}`;
+    setTimeout(() => {
+      setSending(false);
+      toast.success("Ihr E-Mail-Programm wurde geöffnet. Bitte senden Sie die E-Mail ab.");
+      setForm({ name: "", email: "", phone: "", service: "", message: "", privacy: false });
+    }, 800);
+  };
+
   return (
     <section id="contact" className="py-20 lg:py-28 bg-surface">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="text-center max-w-2xl mx-auto mb-14">
+          <p className="text-sm font-bold text-brand uppercase tracking-wider">Kontakt</p>
+          <h2 className="mt-2 text-3xl sm:text-4xl font-black text-navy">So erreichen Sie uns</h2>
+          <p className="mt-4 text-muted-foreground text-lg">Schreiben Sie uns oder rufen Sie an — wir antworten typischerweise innerhalb weniger Stunden.</p>
+        </div>
         <div className="grid lg:grid-cols-2 gap-12">
-          <div>
-            <p className="text-sm font-bold text-brand uppercase tracking-wider">Kontakt</p>
-            <h2 className="mt-2 text-3xl sm:text-4xl font-black text-navy">So erreichen Sie uns</h2>
-            <p className="mt-4 text-muted-foreground text-lg">Besuchen Sie uns, rufen Sie an oder schreiben Sie eine E-Mail — wir antworten typischerweise innerhalb weniger Stunden.</p>
-            <div className="mt-8 space-y-4">
+          {/* Left: Contact Info + Form */}
+          <div className="space-y-8">
+            <div className="space-y-4">
               {[
                 { icon: MapPin, label: "Adresse", value: BIZ.address },
                 { icon: Phone, label: "Telefon", value: BIZ.phone, href: `tel:${BIZ.phoneHref}` },
@@ -696,7 +646,7 @@ function Contact() {
                 </div>
               ))}
             </div>
-            <div className="mt-8 flex items-center gap-4 rounded-2xl bg-card p-5 border shadow-card">
+            <div className="flex items-center gap-4 rounded-2xl bg-card p-5 border shadow-card">
               <img src={logo} alt="Hoffmann & Jeek" className="h-14 w-14 rounded-xl object-cover" />
               <div>
                 <p className="text-xs uppercase tracking-wider text-muted-foreground font-bold">Ihr Ansprechpartner</p>
@@ -705,20 +655,80 @@ function Contact() {
               </div>
             </div>
           </div>
-          <div className="rounded-2xl overflow-hidden shadow-card border min-h-[400px]">
-            <iframe
-              title="Standort Hoffmann & Jeek Berlin"
-              src={`https://maps.google.com/maps?q=${encodeURIComponent(BIZ.address)}&t=&z=13&ie=UTF8&iwloc=&output=embed`}
-              width="100%" height="100%" style={{ border: 0, minHeight: 400 }} loading="lazy" referrerPolicy="no-referrer-when-downgrade"
-            />
+          {/* Right: Contact Form */}
+          <div className="rounded-2xl bg-card border shadow-card p-8">
+            <h3 className="text-xl font-black text-navy mb-6 flex items-center gap-2">
+              <Mail className="h-5 w-5 text-brand" /> Nachricht senden
+            </h3>
+            <form onSubmit={handleSubmit} className="space-y-4">
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <Label htmlFor="cf-name">Name *</Label>
+                  <Input id="cf-name" required className="mt-1" placeholder="Ihr vollständiger Name"
+                    value={form.name} onChange={e => setForm(f => ({ ...f, name: e.target.value }))} />
+                </div>
+                <div>
+                  <Label htmlFor="cf-phone">Telefon *</Label>
+                  <Input id="cf-phone" type="tel" required className="mt-1" placeholder="+49 ..."
+                    value={form.phone} onChange={e => setForm(f => ({ ...f, phone: e.target.value }))} />
+                </div>
+              </div>
+              <div>
+                <Label htmlFor="cf-email">E-Mail *</Label>
+                <Input id="cf-email" type="email" required className="mt-1" placeholder="ihre@email.de"
+                  value={form.email} onChange={e => setForm(f => ({ ...f, email: e.target.value }))} />
+              </div>
+              <div>
+                <Label htmlFor="cf-service">Gewünschte Leistung</Label>
+                <select id="cf-service" className="mt-1 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
+                  value={form.service} onChange={e => setForm(f => ({ ...f, service: e.target.value }))}>
+                  <option value="">Bitte wählen...</option>
+                  {SERVICES.map(s => <option key={s.title} value={s.title}>{s.title}</option>)}
+                  <option value="Sonstiges">Sonstiges</option>
+                </select>
+              </div>
+              <div>
+                <Label htmlFor="cf-message">Nachricht *</Label>
+                <Textarea id="cf-message" required rows={4} className="mt-1"
+                  placeholder="Beschreiben Sie Ihr Objekt, die gewünschte Leistung und Ihren Reinigungsbedarf ..."
+                  value={form.message} onChange={e => setForm(f => ({ ...f, message: e.target.value }))} />
+              </div>
+              <div className="flex items-start gap-2">
+                <Checkbox id="cf-privacy" required className="mt-1"
+                  checked={form.privacy} onCheckedChange={v => setForm(f => ({ ...f, privacy: !!v }))} />
+                <Label htmlFor="cf-privacy" className="text-sm font-normal text-muted-foreground leading-snug">
+                  Ich stimme der{" "}
+                  <button type="button" onClick={onDatenschutz} className="text-brand underline cursor-pointer hover:text-brand/80">
+                    Datenschutzerklärung
+                  </button>{" "}
+                  zu.
+                </Label>
+              </div>
+              <Button type="submit" disabled={sending} className="w-full bg-[image:var(--gradient-cta)] text-navy hover:opacity-90 font-black h-12 text-base shadow-glow">
+                {sending ? "Wird vorbereitet..." : <><Mail className="mr-2 h-4 w-4" /> Nachricht senden</>}
+              </Button>
+              <p className="text-xs text-center text-muted-foreground">
+                Nach dem Klick öffnet sich Ihr E-Mail-Programm mit den ausgefüllten Daten — einfach absenden.
+              </p>
+            </form>
           </div>
+        </div>
+        {/* Map */}
+        <div className="mt-12 rounded-2xl overflow-hidden shadow-card border" style={{ height: 380 }}>
+          <iframe
+            title="Standort Hoffmann & Jeek"
+            src={`https://maps.google.com/maps?q=${encodeURIComponent(BIZ.address)}&t=&z=13&ie=UTF8&iwloc=&output=embed`}
+            width="100%" height="100%" style={{ border: 0 }} loading="lazy" referrerPolicy="no-referrer-when-downgrade"
+          />
         </div>
       </div>
     </section>
   );
 }
 
-function Footer() {
+function Footer({ onDatenschutz, onImpressum, onAgb }: {
+  onDatenschutz: () => void; onImpressum: () => void; onAgb: () => void;
+}) {
   return (
     <footer className="bg-navy text-white/70">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-16">
@@ -766,9 +776,9 @@ function Footer() {
         <div className="mt-12 pt-6 border-t border-white/10 flex flex-col sm:flex-row justify-between gap-4 text-sm">
           <p>© {new Date().getFullYear()} {BIZ.fullName}. Alle Rechte vorbehalten.</p>
           <div className="flex gap-6">
-            <a href="#" className="hover:text-brand">Datenschutz</a>
-            <a href="#" className="hover:text-brand">Impressum</a>
-            <a href="#" className="hover:text-brand">AGB</a>
+            <button onClick={onDatenschutz} className="hover:text-brand transition-colors cursor-pointer">Datenschutz</button>
+            <button onClick={onImpressum} className="hover:text-brand transition-colors cursor-pointer">Impressum</button>
+            <button onClick={onAgb} className="hover:text-brand transition-colors cursor-pointer">AGB</button>
           </div>
         </div>
       </div>
@@ -776,17 +786,42 @@ function Footer() {
   );
 }
 
-function QuoteModal({ open, onOpenChange }: { open: boolean; onOpenChange: (v: boolean) => void }) {
+function QuoteModal({ open, onOpenChange, onDatenschutz }: { open: boolean; onOpenChange: (v: boolean) => void; onDatenschutz?: () => void }) {
   const [submitting, setSubmitting] = useState(false);
+  const [qForm, setQForm] = useState({ fn: "", ln: "", email: "", phone: "", city: BIZ.city, plz: "", service: "", message: "" });
+
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setSubmitting(true);
+    const fullName = `${qForm.fn} ${qForm.ln}`.trim();
+    const subject = encodeURIComponent(`Angebotsanfrage von ${fullName} – ${BIZ.fullName}`);
+    const body = encodeURIComponent(
+      `Sehr geehrte Damen und Herren,
+
+hiermit bitte ich um ein kostenloses Angebot.
+
+Name: ${fullName}
+E-Mail: ${qForm.email}
+Telefon: ${qForm.phone}
+Stadt: ${qForm.city}${qForm.plz ? ` (PLZ: ${qForm.plz})` : ""}
+Gewünschte Leistung: ${qForm.service || "Keine Angabe"}
+
+Nachricht / Beschreibung:
+${qForm.message || "Keine weiteren Angaben."}
+
+---
+Angebotsanfrage über die Website von ${BIZ.fullName}
+${BIZ.address}`
+    );
+    window.location.href = `mailto:${BIZ.email}?subject=${subject}&body=${body}`;
     setTimeout(() => {
       setSubmitting(false);
       onOpenChange(false);
-      toast.success("Vielen Dank! Wir melden uns innerhalb von 24 Stunden.");
+      toast.success("Ihr E-Mail-Programm wurde geöffnet — bitte senden Sie die E-Mail ab. Wir melden uns innerhalb von 24 Stunden!");
+      setQForm({ fn: "", ln: "", email: "", phone: "", city: BIZ.city, plz: "", service: "", message: "" });
     }, 800);
   };
+
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-lg max-h-[92vh] overflow-y-auto">
@@ -799,28 +834,52 @@ function QuoteModal({ open, onOpenChange }: { open: boolean; onOpenChange: (v: b
         </DialogHeader>
         <form onSubmit={onSubmit} className="space-y-4 mt-2">
           <div className="grid grid-cols-2 gap-3">
-            <div><Label htmlFor="fn">Vorname</Label><Input id="fn" required className="mt-1" /></div>
-            <div><Label htmlFor="ln">Nachname</Label><Input id="ln" required className="mt-1" /></div>
+            <div><Label htmlFor="qfn">Vorname *</Label><Input id="qfn" required className="mt-1" value={qForm.fn} onChange={e => setQForm(f => ({ ...f, fn: e.target.value }))} /></div>
+            <div><Label htmlFor="qln">Nachname *</Label><Input id="qln" required className="mt-1" value={qForm.ln} onChange={e => setQForm(f => ({ ...f, ln: e.target.value }))} /></div>
           </div>
-          <div><Label htmlFor="em">E-Mail</Label><Input id="em" type="email" required className="mt-1" /></div>
-          <div><Label htmlFor="ph">Telefon</Label><Input id="ph" type="tel" required className="mt-1" /></div>
+          <div><Label htmlFor="qem">E-Mail *</Label><Input id="qem" type="email" required className="mt-1" value={qForm.email} onChange={e => setQForm(f => ({ ...f, email: e.target.value }))} /></div>
+          <div><Label htmlFor="qph">Telefon *</Label><Input id="qph" type="tel" required className="mt-1" value={qForm.phone} onChange={e => setQForm(f => ({ ...f, phone: e.target.value }))} /></div>
           <div className="grid grid-cols-[2fr_1fr] gap-3">
-            <div><Label htmlFor="ci">Stadt</Label><Input id="ci" defaultValue={BIZ.city} required className="mt-1" /></div>
-            <div><Label htmlFor="zp">PLZ</Label><Input id="zp" required className="mt-1" /></div>
+            <div><Label htmlFor="qci">Stadt *</Label><Input id="qci" required className="mt-1" value={qForm.city} onChange={e => setQForm(f => ({ ...f, city: e.target.value }))} /></div>
+            <div><Label htmlFor="qzp">PLZ</Label><Input id="qzp" className="mt-1" value={qForm.plz} onChange={e => setQForm(f => ({ ...f, plz: e.target.value }))} /></div>
           </div>
           <div>
-            <Label htmlFor="ms">Nachricht</Label>
-            <Textarea id="ms" placeholder="Beschreiben Sie Ihre Einrichtung, Fläche und Reinigungsbedarf..." rows={4} className="mt-1" />
+            <Label htmlFor="qsv">Gewünschte Leistung</Label>
+            <select id="qsv" className="mt-1 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
+              value={qForm.service} onChange={e => setQForm(f => ({ ...f, service: e.target.value }))}>
+              <option value="">Bitte wählen...</option>
+              {SERVICES.map(s => <option key={s.title} value={s.title}>{s.title}</option>)}
+              <option value="Sonstiges">Sonstiges</option>
+            </select>
+          </div>
+          <div>
+            <Label htmlFor="qms">Nachricht</Label>
+            <Textarea id="qms" placeholder="Beschreiben Sie Ihre Einrichtung, Fläche und Reinigungsbedarf..." rows={3} className="mt-1"
+              value={qForm.message} onChange={e => setQForm(f => ({ ...f, message: e.target.value }))} />
           </div>
           <div className="flex items-start gap-2">
-            <Checkbox id="cs" required className="mt-1" />
-            <Label htmlFor="cs" className="text-sm font-normal text-muted-foreground leading-snug">
-              Ich stimme der <a href="#" className="text-brand underline">Datenschutzerklärung</a> zu.
+            <Checkbox id="qcs" required className="mt-1" />
+            <Label htmlFor="qcs" className="text-sm font-normal text-muted-foreground leading-snug">
+              Ich stimme der{" "}
+              <button
+                type="button"
+                onClick={() => {
+                  onOpenChange(false);
+                  onDatenschutz?.();
+                }}
+                className="text-brand underline cursor-pointer hover:text-brand/80"
+              >
+                Datenschutzerklärung
+              </button>{" "}
+              zu.
             </Label>
           </div>
-          <Button type="submit" disabled={submitting} className="w-full bg-[image:var(--gradient-cta)] text-navy hover:opacity-90 font-black h-12 text-base">
-            {submitting ? "Wird gesendet..." : "Kostenloses Angebot anfordern"}
+          <Button type="submit" disabled={submitting} className="w-full bg-[image:var(--gradient-cta)] text-navy hover:opacity-90 font-black h-12 text-base shadow-glow">
+            {submitting ? "Wird vorbereitet..." : <><Mail className="mr-2 h-4 w-4" /> Angebot per E-Mail anfordern</>}
           </Button>
+          <p className="text-xs text-center text-muted-foreground">
+            Nach dem Klick öffnet sich Outlook / Ihr E-Mail-Programm mit allen Daten — einfach absenden.
+          </p>
         </form>
       </DialogContent>
     </Dialog>
@@ -844,22 +903,218 @@ function FloatingActions() {
   );
 }
 
-function CookieBanner({ onClose }: { onClose: () => void }) {
+function CookieBanner({ onClose, onDatenschutz }: { onClose: () => void; onDatenschutz?: () => void }) {
   return (
     <div className="fixed inset-x-0 bottom-0 z-40 p-3 sm:p-4">
       <div className="mx-auto max-w-4xl rounded-2xl bg-navy text-white shadow-elegant p-5 sm:p-6 border border-white/10">
         <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 justify-between">
           <div className="flex-1">
-            <p className="font-black">Datenschutz & Cookies</p>
+            <p className="font-black">Datenschutz &amp; Cookies</p>
             <p className="text-sm text-white/70 mt-1">Wir verwenden Cookies, um Ihr Erlebnis zu verbessern und den Datenverkehr zu analysieren.</p>
           </div>
           <div className="flex flex-wrap gap-2 shrink-0">
-            <Button variant="ghost" onClick={onClose} className="text-white hover:bg-white/10 hover:text-white">Verwalten</Button>
+            <Button variant="ghost" onClick={onDatenschutz} className="text-white hover:bg-white/10 hover:text-white">Datenschutz</Button>
             <Button variant="ghost" onClick={onClose} className="text-white hover:bg-white/10 hover:text-white">Ablehnen</Button>
             <Button onClick={onClose} className="bg-[image:var(--gradient-cta)] text-navy hover:opacity-90 font-bold">Akzeptieren</Button>
           </div>
         </div>
       </div>
+    </div>
+  );
+}
+
+// ─── Legal Modals ─────────────────────────────────────────────────────────────
+
+function LegalModals({ open, onClose }: { open: "datenschutz" | "impressum" | "agb" | null; onClose: () => void }) {
+  const titles: Record<string, string> = {
+    datenschutz: "Datenschutzerklärung",
+    impressum: "Impressum",
+    agb: "Allgemeine Geschäftsbedingungen (AGB)",
+  };
+  return (
+    <Dialog open={!!open} onOpenChange={v => !v && onClose()}>
+      <DialogContent className="sm:max-w-2xl max-h-[90vh] overflow-y-auto">
+        <DialogHeader>
+          <DialogTitle className="text-2xl font-black text-navy">
+            {open ? titles[open] : ""}
+          </DialogTitle>
+          <DialogDescription className="sr-only">
+            {open ? titles[open] : ""}
+          </DialogDescription>
+        </DialogHeader>
+        <div className="mt-4 space-y-4 text-foreground leading-relaxed">
+          {open === "impressum" && <ImpressumContent />}
+          {open === "datenschutz" && <DatenschutzContent />}
+          {open === "agb" && <AgbContent />}
+        </div>
+      </DialogContent>
+    </Dialog>
+  );
+}
+
+function ImpressumContent() {
+  return (
+    <div className="space-y-5 text-sm">
+      <section>
+        <h3 className="font-bold text-navy text-base mb-2">Angaben gemäß § 5 TMG</h3>
+        <p className="text-muted-foreground">
+          {BIZ.fullName}<br />
+          Inhaber: {BIZ.owner}<br />
+          {BIZ.address}<br />
+          Deutschland
+        </p>
+      </section>
+      <section>
+        <h3 className="font-bold text-navy text-base mb-2">Kontakt</h3>
+        <p className="text-muted-foreground">
+          Telefon: <a href={`tel:${BIZ.phoneHref}`} className="text-brand hover:underline">{BIZ.phone}</a><br />
+          E-Mail: <a href={`mailto:${BIZ.email}`} className="text-brand hover:underline">{BIZ.email}</a>
+        </p>
+      </section>
+      <section>
+        <h3 className="font-bold text-navy text-base mb-2">Berufsbezeichnung und berufsrechtliche Regelungen</h3>
+        <p className="text-muted-foreground">
+          Berufsbezeichnung: Gebäudereiniger<br />
+          Zuständige Kammer: Handwerkskammer Konstanz<br />
+          Verliehen in: Deutschland<br />
+          Berufsrechtliche Regelungen: Handwerksordnung (HwO), Rahmentarifvertrag des Gebäudereinigerhandwerks
+        </p>
+      </section>
+      <section>
+        <h3 className="font-bold text-navy text-base mb-2">Umsatzsteuer-ID</h3>
+        <p className="text-muted-foreground">Umsatzsteuer-Identifikationsnummer gemäß § 27a UStG: Bitte bei uns erfragen.</p>
+      </section>
+      <section>
+        <h3 className="font-bold text-navy text-base mb-2">Streitschlichtung</h3>
+        <p className="text-muted-foreground">
+          Die Europäische Kommission stellt eine Plattform zur Online-Streitbeilegung (OS) bereit:{" "}
+          <a href="https://ec.europa.eu/consumers/odr/" target="_blank" rel="noopener noreferrer" className="text-brand hover:underline">
+            https://ec.europa.eu/consumers/odr/
+          </a>.<br />
+          Wir sind nicht bereit oder verpflichtet, an Streitbeilegungsverfahren vor einer Verbraucherschlichtungsstelle teilzunehmen.
+        </p>
+      </section>
+      <section>
+        <h3 className="font-bold text-navy text-base mb-2">Haftung für Inhalte</h3>
+        <p className="text-muted-foreground">Als Diensteanbieter sind wir gemäß § 7 Abs. 1 TMG für eigene Inhalte auf diesen Seiten nach den allgemeinen Gesetzen verantwortlich. Nach §§ 8 bis 10 TMG sind wir als Diensteanbieter jedoch nicht verpflichtet, übermittelte oder gespeicherte fremde Informationen zu überwachen oder nach Umständen zu forschen, die auf eine rechtswidrige Tätigkeit hinweisen. Verpflichtungen zur Entfernung oder Sperrung der Nutzung von Informationen nach den allgemeinen Gesetzen bleiben hiervon unberührt. Eine diesbezügliche Haftung ist jedoch erst ab dem Zeitpunkt der Kenntnis einer konkreten Rechtsverletzung möglich. Bei Bekanntwerden von entsprechenden Rechtsverletzungen werden wir diese Inhalte umgehend entfernen.</p>
+      </section>
+      <section>
+        <h3 className="font-bold text-navy text-base mb-2">Haftung für Links</h3>
+        <p className="text-muted-foreground">Unser Angebot enthält Links zu externen Websites Dritter, auf deren Inhalte wir keinen Einfluss haben. Deshalb können wir für diese fremden Inhalte auch keine Gewähr übernehmen. Für die Inhalte der verlinkten Seiten ist stets der jeweilige Anbieter oder Betreiber der Seiten verantwortlich. Die verlinkten Seiten wurden zum Zeitpunkt der Verlinkung auf mögliche Rechtsverstöße überprüft. Rechtswidrige Inhalte waren zum Zeitpunkt der Verlinkung nicht erkennbar.</p>
+      </section>
+      <section>
+        <h3 className="font-bold text-navy text-base mb-2">Urheberrecht</h3>
+        <p className="text-muted-foreground">Die durch die Seitenbetreiber erstellten Inhalte und Werke auf diesen Seiten unterliegen dem deutschen Urheberrecht. Die Vervielfältigung, Bearbeitung, Verbreitung und jede Art der Verwertung außerhalb der Grenzen des Urheberrechtes bedürfen der schriftlichen Zustimmung des jeweiligen Autors bzw. Erstellers.</p>
+      </section>
+      <p className="text-xs text-muted-foreground pt-2 border-t">Stand: {new Date().getFullYear()}</p>
+    </div>
+  );
+}
+
+function DatenschutzContent() {
+  return (
+    <div className="space-y-5 text-sm">
+      <section>
+        <h3 className="font-bold text-navy text-base mb-2">1. Datenschutz auf einen Blick</h3>
+        <p className="text-muted-foreground">Die folgenden Hinweise geben einen einfachen Überblick darüber, was mit Ihren personenbezogenen Daten passiert, wenn Sie diese Website besuchen. Personenbezogene Daten sind alle Daten, mit denen Sie persönlich identifiziert werden können. Ausführliche Informationen zum Thema Datenschutz entnehmen Sie unserer unter diesem Text aufgeführten Datenschutzerklärung.</p>
+      </section>
+      <section>
+        <h3 className="font-bold text-navy text-base mb-2">2. Verantwortlicher (Art. 4 Nr. 7 DSGVO)</h3>
+        <p className="text-muted-foreground">
+          {BIZ.fullName}<br />
+          Inhaber: {BIZ.owner}<br />
+          {BIZ.address}<br />
+          Telefon: {BIZ.phone}<br />
+          E-Mail: {BIZ.email}
+        </p>
+      </section>
+      <section>
+        <h3 className="font-bold text-navy text-base mb-2">3. Erhebung und Speicherung personenbezogener Daten</h3>
+        <p className="text-muted-foreground">Wenn Sie uns über das Kontaktformular oder per E-Mail kontaktieren, werden die von Ihnen angegebenen Daten (Name, E-Mail-Adresse, Telefonnummer, Nachricht) zur Bearbeitung Ihrer Anfrage und für den Fall von Anschlussfragen bei uns gespeichert. Diese Daten geben wir nicht ohne Ihre Einwilligung weiter.</p>
+        <p className="text-muted-foreground mt-2">Rechtsgrundlage: Art. 6 Abs. 1 lit. b DSGVO (Durchführung vorvertraglicher Maßnahmen) sowie Art. 6 Abs. 1 lit. f DSGVO (berechtigtes Interesse an der Beantwortung von Kundenanfragen).</p>
+      </section>
+      <section>
+        <h3 className="font-bold text-navy text-base mb-2">4. Server-Log-Dateien</h3>
+        <p className="text-muted-foreground">Der Anbieter der Seiten erhebt und speichert automatisch Informationen in so genannten Server-Log-Dateien, die Ihr Browser automatisch an uns übermittelt: Browsertyp und Browserversion, verwendetes Betriebssystem, Referrer-URL, Hostname des zugreifenden Rechners, Uhrzeit der Serveranfrage sowie IP-Adresse. Diese Daten sind nicht bestimmten Personen zuordenbar. Eine Zusammenführung dieser Daten mit anderen Datenquellen wird nicht vorgenommen. Rechtsgrundlage: Art. 6 Abs. 1 lit. f DSGVO.</p>
+      </section>
+      <section>
+        <h3 className="font-bold text-navy text-base mb-2">5. Cookies</h3>
+        <p className="text-muted-foreground">Diese Website verwendet technisch notwendige Cookies (z. B. zur Speicherung der Cookie-Einwilligung). Darüber hinaus werden keine weiteren Cookies ohne Ihre Einwilligung gesetzt. Rechtsgrundlage: Art. 6 Abs. 1 lit. f DSGVO für technisch notwendige Cookies; Art. 6 Abs. 1 lit. a DSGVO für alle anderen Cookies.</p>
+      </section>
+      <section>
+        <h3 className="font-bold text-navy text-base mb-2">6. Externe Dienste (Google Maps)</h3>
+        <p className="text-muted-foreground">Auf dieser Website nutzen wir Google Maps der Google LLC, 1600 Amphitheatre Parkway, Mountain View, CA 94043, USA. Bei der Nutzung von Google Maps können Daten an Google-Server in den USA übertragen werden. Weitere Informationen finden Sie in der Datenschutzerklärung von Google: <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer" className="text-brand hover:underline">https://policies.google.com/privacy</a>. Rechtsgrundlage: Art. 6 Abs. 1 lit. a DSGVO (Einwilligung).</p>
+      </section>
+      <section>
+        <h3 className="font-bold text-navy text-base mb-2">7. Ihre Rechte (Art. 15–22 DSGVO)</h3>
+        <ul className="text-muted-foreground list-disc list-inside space-y-1">
+          <li>Auskunft über Ihre gespeicherten Daten (Art. 15 DSGVO)</li>
+          <li>Berichtigung unrichtiger Daten (Art. 16 DSGVO)</li>
+          <li>Löschung Ihrer Daten (Art. 17 DSGVO)</li>
+          <li>Einschränkung der Verarbeitung (Art. 18 DSGVO)</li>
+          <li>Datenübertragbarkeit (Art. 20 DSGVO)</li>
+          <li>Widerspruch gegen die Verarbeitung (Art. 21 DSGVO)</li>
+          <li>Widerruf einer erteilten Einwilligung (Art. 7 Abs. 3 DSGVO)</li>
+        </ul>
+        <p className="text-muted-foreground mt-2">Sie haben außerdem das Recht, bei der Aufsichtsbehörde Beschwerde einzulegen. Zuständig für Baden-Württemberg: Landesbeauftragter für den Datenschutz und die Informationsfreiheit Baden-Württemberg (LfDI), Königstraße 10a, 70173 Stuttgart, <a href="https://www.baden-wuerttemberg.datenschutz.de" target="_blank" rel="noopener noreferrer" className="text-brand hover:underline">www.baden-wuerttemberg.datenschutz.de</a>.</p>
+      </section>
+      <section>
+        <h3 className="font-bold text-navy text-base mb-2">8. Speicherdauer</h3>
+        <p className="text-muted-foreground">Personenbezogene Daten werden gelöscht, sobald der Zweck der Speicherung entfällt und keine gesetzlichen Aufbewahrungspflichten entgegenstehen (handelsrechtlich 6–10 Jahre gemäß §§ 238 ff. HGB).</p>
+      </section>
+      <p className="text-xs text-muted-foreground pt-2 border-t">Stand: {new Date().getFullYear()}</p>
+    </div>
+  );
+}
+
+function AgbContent() {
+  return (
+    <div className="space-y-5 text-sm">
+      <section>
+        <h3 className="font-bold text-navy text-base mb-2">§ 1 Geltungsbereich</h3>
+        <p className="text-muted-foreground">Diese Allgemeinen Geschäftsbedingungen (AGB) gelten für alle Verträge zwischen {BIZ.fullName}, Inhaber: {BIZ.owner}, {BIZ.address} (nachfolgend „Auftragnehmer") und unseren Auftraggebern über Gebäudereinigungsleistungen und damit verbundene Dienstleistungen. Abweichende Bedingungen des Auftraggebers werden nur anerkannt, wenn der Auftragnehmer diesen ausdrücklich schriftlich zustimmt.</p>
+      </section>
+      <section>
+        <h3 className="font-bold text-navy text-base mb-2">§ 2 Vertragsschluss</h3>
+        <p className="text-muted-foreground">Anfragen und Angebote sind grundsätzlich unverbindlich. Ein Vertrag kommt erst durch schriftliche Auftragserteilung des Auftraggebers und schriftliche Auftragsbestätigung des Auftragnehmers oder durch tatsächliche Ausführung der Leistung zustande. Mündliche Nebenabreden bedürfen der schriftlichen Bestätigung.</p>
+      </section>
+      <section>
+        <h3 className="font-bold text-navy text-base mb-2">§ 3 Leistungsumfang</h3>
+        <p className="text-muted-foreground">Der Umfang der zu erbringenden Reinigungsleistungen ergibt sich aus dem individuell vereinbarten Leistungsverzeichnis bzw. Angebot. Änderungen und Erweiterungen des Leistungsumfangs bedürfen der schriftlichen Vereinbarung. Zusatzleistungen werden auf Basis der zum Zeitpunkt der Leistungserbringung gültigen Preisliste gesondert abgerechnet.</p>
+      </section>
+      <section>
+        <h3 className="font-bold text-navy text-base mb-2">§ 4 Vergütung und Zahlungsbedingungen</h3>
+        <p className="text-muted-foreground">Die Vergütung richtet sich nach dem individuell vereinbarten Angebot zzgl. der gesetzlichen Mehrwertsteuer. Rechnungen sind innerhalb von 14 Tagen nach Rechnungsdatum ohne Abzug zahlbar, sofern nichts anderes vereinbart wurde. Bei Zahlungsverzug ist der Auftragnehmer berechtigt, Verzugszinsen in Höhe von 9 Prozentpunkten über dem Basiszinssatz (§ 288 Abs. 2 BGB) sowie eine Mahngebühr von 5,00 € je Mahnung zu berechnen.</p>
+      </section>
+      <section>
+        <h3 className="font-bold text-navy text-base mb-2">§ 5 Pflichten des Auftraggebers</h3>
+        <p className="text-muted-foreground">Der Auftraggeber ist verpflichtet, dem Auftragnehmer und seinen Mitarbeitern den Zugang zu den zu reinigenden Räumlichkeiten rechtzeitig zu ermöglichen sowie Strom und Wasser unentgeltlich zur Verfügung zu stellen. Mängel oder Schäden, die vor Beginn der Reinigungsarbeiten vorhanden sind, sind vor Auftragsbeginn schriftlich festzuhalten. Der Auftraggeber hat sicherzustellen, dass wertvolle, zerbrechliche oder leicht beschädigbare Gegenstände vor Beginn der Reinigungsarbeiten gesichert oder entfernt werden.</p>
+      </section>
+      <section>
+        <h3 className="font-bold text-navy text-base mb-2">§ 6 Mängelrüge und Gewährleistung</h3>
+        <p className="text-muted-foreground">Erkennbare Mängel sind unverzüglich, spätestens jedoch innerhalb von 24 Stunden nach Leistungserbringung schriftlich beim Auftragnehmer anzuzeigen (§ 377 HGB analog). Der Auftragnehmer hat das Recht zur Nacherfüllung. Schlägt die Nacherfüllung zweimal fehl, kann der Auftraggeber Minderung verlangen oder bei wesentlichen Mängeln vom Vertrag zurücktreten.</p>
+      </section>
+      <section>
+        <h3 className="font-bold text-navy text-base mb-2">§ 7 Haftung</h3>
+        <p className="text-muted-foreground">Der Auftragnehmer haftet unbeschränkt für Schäden aus der Verletzung des Lebens, des Körpers oder der Gesundheit sowie für vorsätzlich oder grob fahrlässig verursachte Schäden. Im Übrigen beschränkt sich die Haftung auf vorhersehbare, vertragstypische Schäden. Der Auftragnehmer ist betriebshaftpflichtversichert.</p>
+      </section>
+      <section>
+        <h3 className="font-bold text-navy text-base mb-2">§ 8 Vertragsdauer und Kündigung</h3>
+        <p className="text-muted-foreground">Daueraufträge laufen auf unbestimmte Zeit und können von beiden Seiten mit einer Frist von vier Wochen zum Monatsende schriftlich gekündigt werden, sofern im Einzelvertrag keine abweichende Regelung getroffen wurde. Das Recht zur außerordentlichen Kündigung aus wichtigem Grund bleibt unberührt. Ein wichtiger Grund liegt insbesondere vor bei Zahlungsverzug von mehr als 30 Tagen oder bei wesentlichen Verstößen gegen diese AGB.</p>
+      </section>
+      <section>
+        <h3 className="font-bold text-navy text-base mb-2">§ 9 Datenschutz</h3>
+        <p className="text-muted-foreground">Die Verarbeitung personenbezogener Daten des Auftraggebers erfolgt ausschließlich zur Vertragserfüllung und nach Maßgabe der geltenden Datenschutzgesetze (DSGVO, BDSG). Einzelheiten entnehmen Sie bitte unserer Datenschutzerklärung.</p>
+      </section>
+      <section>
+        <h3 className="font-bold text-navy text-base mb-2">§ 10 Gerichtsstand und anwendbares Recht</h3>
+        <p className="text-muted-foreground">Es gilt ausschließlich das Recht der Bundesrepublik Deutschland unter Ausschluss des UN-Kaufrechts (CISG). Gerichtsstand für alle Streitigkeiten aus diesem Vertrag ist {BIZ.city}, sofern der Auftraggeber Kaufmann, juristische Person des öffentlichen Rechts oder öffentlich-rechtliches Sondervermögen ist. Für Verbraucher gelten die gesetzlichen Gerichtsstandsregelungen.</p>
+      </section>
+      <section>
+        <h3 className="font-bold text-navy text-base mb-2">§ 11 Salvatorische Klausel</h3>
+        <p className="text-muted-foreground">Sollten einzelne Bestimmungen dieser AGB unwirksam sein oder werden, bleibt die Wirksamkeit der übrigen Bestimmungen unberührt. Anstelle der unwirksamen Bestimmung gilt die gesetzliche Regelung.</p>
+      </section>
+      <p className="text-xs text-muted-foreground pt-2 border-t">{BIZ.fullName} · {BIZ.address} · Stand: {new Date().getFullYear()}</p>
     </div>
   );
 }
