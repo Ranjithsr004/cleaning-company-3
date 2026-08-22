@@ -242,7 +242,14 @@ function TrustBar() {
   );
 }
 
-const SERVICES = [
+const SERVICES: {
+  icon: any;
+  title: string;
+  desc: string;
+  img: string;
+  imgPosition?: string;
+  imgFit?: "contain" | "cover";
+}[] = [
   { icon: Wind, title: "Glasreinigung", desc: "Streifenfreie Innen- und Außenreinigung von Fenstern und Glasfassaden — für Büros, Schaufenster und Gewerbegebäude.", img: heroImg2 },
   { icon: Brush, title: "Grundreinigung", desc: "Intensive Tiefenreinigung von Böden, Wänden und Oberflächen — ideal nach Baustellen, Renovierungen oder zum saisonalen Reset.", img: heroImg3 },
   { icon: Building2, title: "Bauendreinigung", desc: "Professionelle Endreinigung nach Bau- und Renovierungsarbeiten — damit Ihr Objekt bezugsfertig und makellos übergeben werden kann.", img: gal3 },
@@ -252,7 +259,7 @@ const SERVICES = [
   { icon: Camera, title: "Fenster- & Jalousienenreinigung", desc: "Gründliche Reinigung von Fenstern, Jalousien, Rollos und Sonnenschutzsystemen — innen wie außen.", img: gal2 },
   { icon: ClipboardList, title: "Winterdienst", desc: "Schneeräumung, Streuung und Glättebekämpfung für Gehwege, Parkplätze und Außenanlagen Ihrer Immobilie.", img: gal6 },
   { icon: HeadphonesIcon, title: "Hausmeisterdienst", desc: "Umfassende Hausmeisterleistungen: Instandhaltung, Kleinreparaturen, Grünanlagenpflege und Verkehrssicherungspflicht.", img: gal5 },
-  { icon: GraduationCap, title: "Weitere Reinigungsarbeiten", desc: "Individuelle Sonderreinigungen, Treppenhaus-, Tiefgaragen- und Veranstaltungsreinigungen nach Bedarf.", img: work1 },
+  { icon: GraduationCap, title: "Weitere Reinigungsarbeiten", desc: "Individuelle Sonderreinigungen, Treppenhaus-, Tiefgaragen- und Veranstaltungsreinigungen nach Bedarf.", img: work1, imgFit: "contain" },
 ];
 
 function Services() {
@@ -267,8 +274,21 @@ function Services() {
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
           {SERVICES.map(s => (
             <div key={s.title} className="group relative rounded-2xl overflow-hidden shadow-card hover:shadow-elegant hover:-translate-y-1 transition-all duration-300 bg-card border">
-              <div className="h-40 overflow-hidden">
-                <img src={s.img} alt={s.title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
+              <div className="h-48 overflow-hidden relative bg-slate-900/5 dark:bg-slate-900 flex items-center justify-center">
+                {s.imgFit === "contain" && (
+                  <img
+                    src={s.img}
+                    alt=""
+                    aria-hidden="true"
+                    className="absolute inset-0 w-full h-full object-cover blur-md scale-110 opacity-30 pointer-events-none"
+                  />
+                )}
+                <img
+                  src={s.img}
+                  alt={s.title}
+                  style={s.imgPosition ? { objectPosition: s.imgPosition } : undefined}
+                  className={`w-full h-full ${s.imgFit === "contain" ? "object-contain relative z-10 p-1.5" : "object-cover"} group-hover:scale-105 transition-transform duration-500`}
+                />
               </div>
               <div className="p-5">
                 <div className="grid h-10 w-10 place-items-center rounded-xl bg-[image:var(--gradient-cta)] text-navy mb-3 shadow-glow -mt-8 relative z-10">
